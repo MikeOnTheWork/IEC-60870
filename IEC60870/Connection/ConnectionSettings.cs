@@ -1,4 +1,4 @@
-﻿namespace IEC60870.Connections
+﻿namespace IEC60870.Connection
 {
     public class ConnectionSettings
     {

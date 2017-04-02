@@ -6,41 +6,41 @@ namespace IEC60870.IE
 {
     public class IeFileSegment : InformationElement
     {
-        private readonly int length;
-        private readonly int offset;
-        private readonly byte[] segment;
+        private readonly int _length;
+        private readonly int _offset;
+        private readonly byte[] _segment;
 
         public IeFileSegment(byte[] segment, int offset, int length)
         {
-            this.segment = segment;
-            this.offset = offset;
-            this.length = length;
+            _segment = segment;
+            _offset = offset;
+            _length = length;
         }
 
         public IeFileSegment(BinaryReader reader)
         {
-            length = reader.ReadByte();
-            segment = reader.ReadBytes(length);
-            offset = 0;
+            _length = reader.ReadByte();
+            _segment = reader.ReadBytes(_length);
+            _offset = 0;
         }
 
         public override int Encode(byte[] buffer, int i)
         {
-            buffer[i++] = (byte) length;
+            buffer[i++] = (byte) _length;
 
-            Array.Copy(segment, offset, buffer, i, length);
+            Array.Copy(_segment, _offset, buffer, i, _length);
 
-            return length + 1;
+            return _length + 1;
         }
 
         public byte[] GetSegment()
         {
-            return segment;
+            return _segment;
         }
 
         public override string ToString()
         {
-            return "File segment of length: " + length;
+            return "File segment of length: " + _length;
         }
     }
 }

@@ -1,18 +1,18 @@
-﻿using IEC60870.Connections;
-using IEC60870.Object;
+﻿using IEC60870.Object;
 using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using IEC60870.Connection;
 
 namespace IEC60870.SAP
 {
     public class ClientSAP
     {
-        private ConnectionSettings _settings = new ConnectionSettings();
-        private Connection _connection;
-        private IPAddress _host;
-        private int _port;
+        private readonly ConnectionSettings _settings = new ConnectionSettings();
+        private Connection.Connection _connection;
+        private readonly IPAddress _host;
+        private readonly int _port;
 
         public ConnectionEventListener.NewASdu NewASdu { get; set; }
         public ConnectionEventListener.ConnectionClosed ConnectionClosed { get; set; }
@@ -49,9 +49,11 @@ namespace IEC60870.SAP
                 var socket = new Socket(_host.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 socket.Connect(remoteEp);
 
-                _connection = new Connection(socket, _settings);
-                _connection.NewASdu = NewASdu ?? null;
-                _connection.ConnectionClosed = ConnectionClosed ?? null;
+                _connection = new Connection.Connection(socket, _settings)
+                {
+                    NewASdu = NewASdu,
+                    ConnectionClosed = ConnectionClosed
+                };
                 _connection.StartDataTransfer();
             }
             catch (Exception e)
@@ -62,8 +64,7 @@ namespace IEC60870.SAP
 
         public void SendASdu(ASdu asdu)
         {
-            if (_connection != null)
-                _connection.Send(asdu);
+            _connection?.Send(asdu);
         }
 
         public void SetMessageFragmentTimeout(int timeout)

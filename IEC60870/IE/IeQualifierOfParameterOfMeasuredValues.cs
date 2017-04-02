@@ -5,33 +5,33 @@ namespace IEC60870.IE
 {
     public class IeQualifierOfParameterOfMeasuredValues : InformationElement
     {
-        private readonly bool change;
-        private readonly int kindOfParameter;
-        private readonly bool notInOperation;
+        private readonly bool _change;
+        private readonly int _kindOfParameter;
+        private readonly bool _notInOperation;
 
         public IeQualifierOfParameterOfMeasuredValues(int kindOfParameter, bool change, bool notInOperation)
         {
-            this.kindOfParameter = kindOfParameter;
-            this.change = change;
-            this.notInOperation = notInOperation;
+            _kindOfParameter = kindOfParameter;
+            _change = change;
+            _notInOperation = notInOperation;
         }
 
         public IeQualifierOfParameterOfMeasuredValues(BinaryReader reader)
         {
             int b1 = reader.ReadByte();
-            kindOfParameter = b1 & 0x3f;
-            change = (b1 & 0x40) == 0x40;
-            notInOperation = (b1 & 0x80) == 0x80;
+            _kindOfParameter = b1 & 0x3f;
+            _change = (b1 & 0x40) == 0x40;
+            _notInOperation = (b1 & 0x80) == 0x80;
         }
 
         public override int Encode(byte[] buffer, int i)
         {
-            buffer[i] = (byte) kindOfParameter;
-            if (change)
+            buffer[i] = (byte) _kindOfParameter;
+            if (_change)
             {
                 buffer[i] |= 0x40;
             }
-            if (notInOperation)
+            if (_notInOperation)
             {
                 buffer[i] |= 0x80;
             }
@@ -40,23 +40,23 @@ namespace IEC60870.IE
 
         public int GetKindOfParameter()
         {
-            return kindOfParameter;
+            return _kindOfParameter;
         }
 
         public bool IsChange()
         {
-            return change;
+            return _change;
         }
 
         public bool IsNotInOperation()
         {
-            return notInOperation;
+            return _notInOperation;
         }
 
         public override string ToString()
         {
-            return "Qualifier of parameter of measured values, kind of parameter: " + kindOfParameter + ", change: "
-                   + change + ", not in operation: " + notInOperation;
+            return "Qualifier of parameter of measured values, kind of parameter: " + _kindOfParameter + ", change: "
+                   + _change + ", not in operation: " + _notInOperation;
         }
     }
 }

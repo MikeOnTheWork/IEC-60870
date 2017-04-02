@@ -7,30 +7,30 @@ namespace IEC60870.IE
 {
     public class IeStatusAndStatusChanges : InformationElement
     {
-        private readonly int value;
+        private readonly int _value;
 
         public IeStatusAndStatusChanges(int value)
         {
-            this.value = value;
+            _value = value;
         }
 
         public IeStatusAndStatusChanges(BinaryReader reader)
         {
-            value = reader.ReadInt32();
+            _value = reader.ReadInt32();
         }
 
         public override int Encode(byte[] buffer, int i)
         {
-            buffer[i++] = (byte) (value >> 24);
-            buffer[i++] = (byte) (value >> 16);
-            buffer[i++] = (byte) (value >> 8);
-            buffer[i] = (byte) value;
+            buffer[i++] = (byte) (_value >> 24);
+            buffer[i++] = (byte) (_value >> 16);
+            buffer[i++] = (byte) (_value >> 8);
+            buffer[i] = (byte) _value;
             return 4;
         }
 
         public int GetValue()
         {
-            return value;
+            return _value;
         }
 
         public bool GetStatus(int position)
@@ -40,7 +40,7 @@ namespace IEC60870.IE
                 throw new ArgumentException("Position out of bound. Should be between 1 and 16.");
             }
 
-            return ((value >> (position - 17)) & 0x01) == 0x01;
+            return ((_value >> (position - 17)) & 0x01) == 0x01;
         }
 
         public bool HasStatusChanged(int position)
@@ -49,20 +49,20 @@ namespace IEC60870.IE
             {
                 throw new ArgumentException("Position out of bound. Should be between 1 and 16.");
             }
-            return ((value >> (position - 1)) & 0x01) == 0x01;
+            return ((_value >> (position - 1)) & 0x01) == 0x01;
         }
 
         public override string ToString()
         {
             var sb1 = new StringBuilder();
-            sb1.Append(((uint) value >> 16).ToString("X"));
+            sb1.Append(((uint) _value >> 16).ToString("X"));
             while (sb1.Length < 4)
             {
                 sb1.Insert(0, '0'); // pad with leading zero if needed
             }
 
             var sb2 = new StringBuilder();
-            sb2.Append((value & 0xffff).ToString("X"));
+            sb2.Append((_value & 0xffff).ToString("X"));
             while (sb2.Length < 4)
             {
                 sb2.Insert(0, '0'); // pad with leading zero if needed

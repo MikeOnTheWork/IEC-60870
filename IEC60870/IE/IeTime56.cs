@@ -7,29 +7,29 @@ namespace IEC60870.IE
 {
     public class IeTime56 : InformationElement
     {
-        private readonly byte[] value = new byte[7];
+        private readonly byte[] _value = new byte[7];
 
         public IeTime56(long timestamp, TimeZone timeZone, bool invalid)
         {
             var datetime = new DateTime(timestamp);
-            var ms = datetime.Millisecond + 1000*datetime.Second;
+            var ms = datetime.Millisecond + 1000 * datetime.Second;
 
-            value[0] = (byte) ms;
-            value[1] = (byte) (ms >> 8);
-            value[2] = (byte) datetime.Minute;
+            _value[0] = (byte)ms;
+            _value[1] = (byte)(ms >> 8);
+            _value[2] = (byte)datetime.Minute;
 
             if (invalid)
             {
-                value[2] |= 0x80;
+                _value[2] |= 0x80;
             }
-            value[3] = (byte) datetime.Hour;
+            _value[3] = (byte)datetime.Hour;
             if (datetime.IsDaylightSavingTime())
             {
-                value[3] |= 0x80;
+                _value[3] |= 0x80;
             }
-            value[4] = (byte) (datetime.Day + ((((int) datetime.DayOfWeek + 5)%7 + 1) << 5));
-            value[5] = (byte) (datetime.Month + 1);
-            value[6] = (byte) (datetime.Year%100);
+            _value[4] = (byte)(datetime.Day + ((((int)datetime.DayOfWeek + 5) % 7 + 1) << 5));
+            _value[5] = (byte)(datetime.Month + 1);
+            _value[6] = (byte)(datetime.Year % 100);
         }
 
         public IeTime56(long timestamp) : this(timestamp, TimeZone.CurrentTimeZone, false)
@@ -40,28 +40,24 @@ namespace IEC60870.IE
         {
             for (var i = 0; i < 7; i++)
             {
-                this.value[i] = value[i];
+                _value[i] = value[i];
             }
         }
 
         public IeTime56(BinaryReader reader)
         {
-            value = reader.ReadBytes(7);
+            _value = reader.ReadBytes(7);
         }
 
         public override int Encode(byte[] buffer, int i)
         {
-            Array.Copy(value, 0, buffer, i, 7);
+            Array.Copy(_value, 0, buffer, i, 7);
             return 7;
         }
 
         public long GetTimestamp(int startOfCentury, TimeZone timeZone)
         {
-            var century = startOfCentury/100*100;
-            if (value[6] < startOfCentury%100)
-            {
-                century += 100;
-            }
+            //TODO implement GetTimestamp
 
             return -1;
         }
@@ -78,52 +74,52 @@ namespace IEC60870.IE
 
         public int GetMillisecond()
         {
-            return ((value[0] & 0xff) + ((value[1] & 0xff) << 8))%1000;
+            return ((_value[0] & 0xff) + ((_value[1] & 0xff) << 8)) % 1000;
         }
 
         public int GetSecond()
         {
-            return ((value[0] & 0xff) + ((value[1] & 0xff) << 8))/1000;
+            return ((_value[0] & 0xff) + ((_value[1] & 0xff) << 8)) / 1000;
         }
 
         public int GetMinute()
         {
-            return value[2] & 0x3f;
+            return _value[2] & 0x3f;
         }
 
         public int GetHour()
         {
-            return value[3] & 0x1f;
+            return _value[3] & 0x1f;
         }
 
         public int GetDayOfWeek()
         {
-            return (value[4] & 0xe0) >> 5;
+            return (_value[4] & 0xe0) >> 5;
         }
 
         public int GetDayOfMonth()
         {
-            return value[4] & 0x1f;
+            return _value[4] & 0x1f;
         }
 
         public int GetMonth()
         {
-            return value[5] & 0x0f;
+            return _value[5] & 0x0f;
         }
 
         public int GetYear()
         {
-            return value[6] & 0x7f;
+            return _value[6] & 0x7f;
         }
 
         public bool IsSummerTime()
         {
-            return (value[3] & 0x80) == 0x80;
+            return (_value[3] & 0x80) == 0x80;
         }
 
         public bool IsInvalid()
         {
-            return (value[2] & 0x80) == 0x80;
+            return (_value[2] & 0x80) == 0x80;
         }
 
         public override string ToString()

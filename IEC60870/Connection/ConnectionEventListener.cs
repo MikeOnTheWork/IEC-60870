@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using IEC60870.Object;
 
-namespace IEC60870.Connections
+namespace IEC60870.Connection
 {
     public class ConnectionEventListener
     {

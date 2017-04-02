@@ -6,11 +6,11 @@ namespace IEC60870.IE
 {
     public class IeShortFloat : InformationElement
     {
-        private readonly float value;
+        private readonly float _value;
 
         public IeShortFloat(float value)
         {
-            this.value = value;
+            _value = value;
         }
 
         public IeShortFloat(BinaryReader reader)
@@ -18,12 +18,12 @@ namespace IEC60870.IE
             var data = reader.ReadByte() | (reader.ReadByte() << 8) | (reader.ReadByte() << 16) |
                        (reader.ReadByte() << 24);
             var bytes = BitConverter.GetBytes(data);
-            value = BitConverter.ToSingle(bytes, 0);
+            _value = BitConverter.ToSingle(bytes, 0);
         }
 
         public override int Encode(byte[] buffer, int i)
         {
-            var tempVal = BitConverter.ToInt32(BitConverter.GetBytes(value), 0);
+            var tempVal = BitConverter.ToInt32(BitConverter.GetBytes(_value), 0);
             buffer[i++] = (byte) tempVal;
             buffer[i++] = (byte) (tempVal >> 8);
             buffer[i++] = (byte) (tempVal >> 16);
@@ -34,12 +34,12 @@ namespace IEC60870.IE
 
         public float GetValue()
         {
-            return value;
+            return _value;
         }
 
         public override string ToString()
         {
-            return "Short float value: " + value;
+            return "Short float value: " + _value;
         }
     }
 }

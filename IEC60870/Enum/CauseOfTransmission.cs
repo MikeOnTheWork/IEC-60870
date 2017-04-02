@@ -1,5 +1,5 @@
 ﻿namespace IEC60870.Enum
-{
+{   
     public enum CauseOfTransmission
     {
         PERIODIC = 1,

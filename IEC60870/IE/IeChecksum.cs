@@ -5,32 +5,32 @@ namespace IEC60870.IE
 {
     public class IeChecksum : InformationElement
     {
-        private readonly int value;
+        private readonly int _value;
 
         public IeChecksum(int value)
         {
-            this.value = value;
+            _value = value;
         }
 
         public IeChecksum(BinaryReader reader)
         {
-            value = reader.ReadByte();
+            _value = reader.ReadByte();
         }
 
         public override int Encode(byte[] buffer, int i)
         {
-            buffer[i] = (byte) value;
+            buffer[i] = (byte) _value;
             return 1;
         }
 
         public int GetValue()
         {
-            return value;
+            return _value;
         }
 
         public override string ToString()
         {
-            return "Checksum: " + value;
+            return "Checksum: " + _value;
         }
     }
 }

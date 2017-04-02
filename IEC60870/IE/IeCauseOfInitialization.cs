@@ -6,8 +6,8 @@ namespace IEC60870.IE
 {
     public class IeCauseOfInitialization : InformationElement
     {
-        private readonly bool initAfterParameterChange;
-        private readonly int value;
+        private readonly bool _initAfterParameterChange;
+        private readonly int _value;
 
         public IeCauseOfInitialization(int value, bool initAfterParameterChange)
         {
@@ -16,28 +16,28 @@ namespace IEC60870.IE
                 throw new ArgumentException("Value has to be in the range 0..127");
             }
 
-            this.value = value;
-            this.initAfterParameterChange = initAfterParameterChange;
+            _value = value;
+            _initAfterParameterChange = initAfterParameterChange;
         }
 
         public IeCauseOfInitialization(BinaryReader reader)
         {
             int b1 = reader.ReadByte();
 
-            initAfterParameterChange = (b1 & 0x80) == 0x80;
+            _initAfterParameterChange = (b1 & 0x80) == 0x80;
 
-            value = b1 & 0x7f;
+            _value = b1 & 0x7f;
         }
 
         public override int Encode(byte[] buffer, int i)
         {
-            if (initAfterParameterChange)
+            if (_initAfterParameterChange)
             {
-                buffer[i] = (byte) (value | 0x80);
+                buffer[i] = (byte) (_value | 0x80);
             }
             else
             {
-                buffer[i] = (byte) value;
+                buffer[i] = (byte) _value;
             }
 
             return 1;
@@ -45,17 +45,17 @@ namespace IEC60870.IE
 
         public int GetValue()
         {
-            return value;
+            return _value;
         }
 
         public bool IsInitAfterParameterChange()
         {
-            return initAfterParameterChange;
+            return _initAfterParameterChange;
         }
 
         public override string ToString()
         {
-            return "Cause of initialization: " + value + ", init after parameter change: " + initAfterParameterChange;
+            return "Cause of initialization: " + _value + ", init after parameter change: " + _initAfterParameterChange;
         }
     }
 }

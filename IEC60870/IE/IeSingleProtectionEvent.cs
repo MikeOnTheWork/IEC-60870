@@ -12,59 +12,59 @@ namespace IEC60870.IE
             On
         }
 
-        private readonly int value;
+        private readonly int _value;
 
         public IeSingleProtectionEvent(EventState eventState, bool elapsedTimeInvalid, bool blocked,
             bool substituted, bool notTopical, bool eventInvalid)
         {
-            value = 0;
+            _value = 0;
 
             switch (eventState)
             {
                 case EventState.Off:
-                    value |= 0x01;
+                    _value |= 0x01;
                     break;
                 case EventState.On:
-                    value |= 0x02;
+                    _value |= 0x02;
                     break;
             }
 
             if (elapsedTimeInvalid)
             {
-                value |= 0x08;
+                _value |= 0x08;
             }
             if (blocked)
             {
-                value |= 0x10;
+                _value |= 0x10;
             }
             if (substituted)
             {
-                value |= 0x20;
+                _value |= 0x20;
             }
             if (notTopical)
             {
-                value |= 0x40;
+                _value |= 0x40;
             }
             if (eventInvalid)
             {
-                value |= 0x80;
+                _value |= 0x80;
             }
         }
 
         public IeSingleProtectionEvent(BinaryReader reader)
         {
-            value = reader.ReadByte();
+            _value = reader.ReadByte();
         }
 
         public override int Encode(byte[] buffer, int i)
         {
-            buffer[i] = (byte) value;
+            buffer[i] = (byte) _value;
             return 1;
         }
 
         public EventState GetEventState()
         {
-            switch (value & 0x03)
+            switch (_value & 0x03)
             {
                 case 1:
                     return EventState.Off;
@@ -77,27 +77,27 @@ namespace IEC60870.IE
 
         public bool IsElapsedTimeInvalid()
         {
-            return (value & 0x08) == 0x08;
+            return (_value & 0x08) == 0x08;
         }
 
         public bool IsBlocked()
         {
-            return (value & 0x10) == 0x10;
+            return (_value & 0x10) == 0x10;
         }
 
         public bool IsSubstituted()
         {
-            return (value & 0x20) == 0x20;
+            return (_value & 0x20) == 0x20;
         }
 
         public bool IsNotTopical()
         {
-            return (value & 0x40) == 0x40;
+            return (_value & 0x40) == 0x40;
         }
 
         public bool IsEventInvalid()
         {
-            return (value & 0x80) == 0x80;
+            return (_value & 0x80) == 0x80;
         }
 
         public override string ToString()

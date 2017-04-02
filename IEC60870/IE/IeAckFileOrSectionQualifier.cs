@@ -5,41 +5,41 @@ namespace IEC60870.IE
 {
     public class IeAckFileOrSectionQualifier : InformationElement
     {
-        private readonly int action;
-        private readonly int notice;
+        private readonly int _action;
+        private readonly int _notice;
 
         public IeAckFileOrSectionQualifier(int action, int notice)
         {
-            this.action = action;
-            this.notice = notice;
+            this._action = action;
+            this._notice = notice;
         }
 
         public IeAckFileOrSectionQualifier(BinaryReader reader)
         {
             int b1 = reader.ReadByte();
-            action = b1 & 0x0f;
-            notice = (b1 >> 4) & 0x0f;
+            _action = b1 & 0x0f;
+            _notice = (b1 >> 4) & 0x0f;
         }
 
         public override int Encode(byte[] buffer, int i)
         {
-            buffer[i] = (byte) (action | (notice << 4));
+            buffer[i] = (byte) (_action | (_notice << 4));
             return 1;
         }
 
         public int GetRequest()
         {
-            return action;
+            return _action;
         }
 
         public int GetFreeze()
         {
-            return notice;
+            return _notice;
         }
 
         public override string ToString()
         {
-            return "Acknowledge file or section qualifier, action: " + action + ", notice: " + notice;
+            return "Acknowledge file or section qualifier, action: " + _action + ", notice: " + _notice;
         }
     }
 }

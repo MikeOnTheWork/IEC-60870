@@ -5,32 +5,32 @@ namespace IEC60870.IE
 {
     public class IeQualifierOfParameterActivation : InformationElement
     {
-        private readonly int value;
+        private readonly int _value;
 
         public IeQualifierOfParameterActivation(int value)
         {
-            this.value = value;
+            _value = value;
         }
 
         public IeQualifierOfParameterActivation(BinaryReader reader)
         {
-            value = reader.ReadByte();
+            _value = reader.ReadByte();
         }
 
         public override int Encode(byte[] buffer, int i)
         {
-            buffer[i] = (byte) value;
+            buffer[i] = (byte) _value;
             return 1;
         }
 
         public int GetValue()
         {
-            return value;
+            return _value;
         }
 
         public override string ToString()
         {
-            return "Qualifier of parameter activation: " + value;
+            return "Qualifier of parameter activation: " + _value;
         }
     }
 }

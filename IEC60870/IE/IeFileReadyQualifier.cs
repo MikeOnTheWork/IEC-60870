@@ -5,26 +5,26 @@ namespace IEC60870.IE
 {
     public class IeFileReadyQualifier : InformationElement
     {
-        private readonly bool negativeConfirm;
-        private readonly int value;
+        private readonly bool _negativeConfirm;
+        private readonly int _value;
 
         public IeFileReadyQualifier(int value, bool negativeConfirm)
         {
-            this.value = value;
-            this.negativeConfirm = negativeConfirm;
+            _value = value;
+            _negativeConfirm = negativeConfirm;
         }
 
         public IeFileReadyQualifier(BinaryReader reader)
         {
             int b1 = reader.ReadByte();
-            value = b1 & 0x7f;
-            negativeConfirm = (b1 & 0x80) == 0x80;
+            _value = b1 & 0x7f;
+            _negativeConfirm = (b1 & 0x80) == 0x80;
         }
 
         public override int Encode(byte[] buffer, int i)
         {
-            buffer[i] = (byte) value;
-            if (negativeConfirm)
+            buffer[i] = (byte) _value;
+            if (_negativeConfirm)
             {
                 buffer[i] |= 0x80;
             }
@@ -33,17 +33,17 @@ namespace IEC60870.IE
 
         public int GetValue()
         {
-            return value;
+            return _value;
         }
 
         public bool IsNegativeConfirm()
         {
-            return negativeConfirm;
+            return _negativeConfirm;
         }
 
         public override string ToString()
         {
-            return "File ready qualifier: " + value + ", negative confirm: " + negativeConfirm;
+            return "File ready qualifier: " + _value + ", negative confirm: " + _negativeConfirm;
         }
     }
 }

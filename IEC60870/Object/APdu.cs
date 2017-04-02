@@ -1,10 +1,10 @@
 ﻿using System.IO;
-using IEC60870.Connections;
+using IEC60870.Connection;
 
 namespace IEC60870.Object
 {
     public class APdu
-    {
+    {        
         public enum ApciType
         {
             I_FORMAT,

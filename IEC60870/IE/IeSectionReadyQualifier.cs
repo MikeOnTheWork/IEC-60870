@@ -5,26 +5,26 @@ namespace IEC60870.IE
 {
     public class IeSectionReadyQualifier : InformationElement
     {
-        private readonly bool sectionNotReady;
-        private readonly int value;
+        private readonly bool _sectionNotReady;
+        private readonly int _value;
 
         public IeSectionReadyQualifier(int value, bool sectionNotReady)
         {
-            this.value = value;
-            this.sectionNotReady = sectionNotReady;
+            _value = value;
+            _sectionNotReady = sectionNotReady;
         }
 
         public IeSectionReadyQualifier(BinaryReader reader)
         {
             int b1 = reader.ReadByte();
-            value = b1 & 0x7f;
-            sectionNotReady = (b1 & 0x80) == 0x80;
+            _value = b1 & 0x7f;
+            _sectionNotReady = (b1 & 0x80) == 0x80;
         }
 
         public override int Encode(byte[] buffer, int i)
         {
-            buffer[i] = (byte) value;
-            if (sectionNotReady)
+            buffer[i] = (byte) _value;
+            if (_sectionNotReady)
             {
                 buffer[i] |= 0x80;
             }
@@ -33,17 +33,17 @@ namespace IEC60870.IE
 
         public int GetValue()
         {
-            return value;
+            return _value;
         }
 
         public bool IsSectionNotReady()
         {
-            return sectionNotReady;
+            return _sectionNotReady;
         }
 
         public override string ToString()
         {
-            return "Section ready qualifier: " + value + ", section not ready: " + sectionNotReady;
+            return "Section ready qualifier: " + _value + ", section not ready: " + _sectionNotReady;
         }
     }
 }
